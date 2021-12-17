@@ -8,6 +8,7 @@ const App = () => {
     personService
       .getAll()
       .then(allPersons => {
+          console.log(allPersons);
         setPersons(allPersons);
       });
   }, []);
