@@ -85,35 +85,35 @@ const App = () => {
       })
   }
 
-    const updatePerson = (newPerson, number) => {
-      newPerson.number = number;
-      personService
-        .update(newPerson.id, newPerson)
-        .then(returnedPerson => {
+  const updatePerson = (newPerson, number) => {
+    newPerson.number = number;
+    personService
+      .update(newPerson.id, newPerson)
+      .then(returnedPerson => {
 
-          setNotification(`Updated number for ${newName}`);
-          setNotificationColor('green');
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
+        setNotification(`Updated number for ${newName}`);
+        setNotificationColor('green');
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
 
-          setPersons(persons.map(person => person.id !== newPerson.id ? person : returnedPerson));
-          setNewName('');
-          setNewNumber('');
-        })
-        .catch(error => {
-          deletedAlready(newPerson.name);
-        })
-    }
+        setPersons(persons.map(person => person.id !== newPerson.id ? person : returnedPerson));
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        deletedAlready(newPerson.name);
+      })
+  }
 
-    const deletedAlready = name => {
-          setNotification(`${name} was already removed from the server!`);
-          setNotificationColor('red');
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
+  const deletedAlready = name => {
+        setNotification(`${name} was already removed from the server!`);
+        setNotificationColor('red');
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
 
-    }
+  }
 
   return (
     <div>
