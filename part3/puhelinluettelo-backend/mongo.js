@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 if (process.argv.length < 3) {
-  console.log('give password as argument');
+  console.log("give password as argument");
   process.exit(1);
 }
 
@@ -16,7 +16,7 @@ const personSchema = new mongoose.Schema({
   number: String
 });
 
-const Person = mongoose.model('Person', personSchema);
+const Person = mongoose.model("Person", personSchema);
 
 if (process.argv.length < 5) {
   Person.find({}).then(result => {

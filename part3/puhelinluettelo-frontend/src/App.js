@@ -8,7 +8,7 @@ const App = () => {
     personService
       .getAll()
       .then(allPersons => {
-          console.log(allPersons);
+        console.log(allPersons);
         setPersons(allPersons);
       });
   }, []);
@@ -78,7 +78,7 @@ const App = () => {
 
     personService
       .remove(person.id)
-      .then(data => {
+      .then(() => {
         const copyPersons = persons.filter(p => p.id !== person.id);
         setPersons(copyPersons);
         setNotificationColor('green');
@@ -88,7 +88,7 @@ const App = () => {
           setNotification(null);
         }, 5000);
       })
-      .catch(error => {
+      .catch(() => {
         deletedAlready(person.name);
       })
   }
@@ -109,18 +109,17 @@ const App = () => {
         setNewName('');
         setNewNumber('');
       })
-      .catch(error => {
+      .catch(() => {
         deletedAlready(newPerson.name);
       })
   }
 
   const deletedAlready = name => {
-        setNotification(`${name} was already removed from the server!`);
-        setNotificationColor('red');
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
-
+    setNotification(`${name} was already removed from the server!`);
+    setNotificationColor('red');
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
   }
 
   return (
