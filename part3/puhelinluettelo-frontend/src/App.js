@@ -60,9 +60,17 @@ const App = () => {
         setPersons(persons.concat(newPerson));
         setNewName('');
         setNewNumber('');
+      })
+      .catch(error => {
+        setNotificationColor("red");
+        console.log(error.response.data);
+        setNotification(error.response.data.error);
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000)
       });
   }
-
+  
   const deletePerson = person => {
     if (!window.confirm(`Delete ${person.name}?`)) {
       return;
