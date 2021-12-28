@@ -2,7 +2,10 @@ const listHelper = require('../utils/list_helper')
 
 describe('total likes', () => {
 
- 
+  test('empty list returns null', () => {
+    const result = listHelper.totalLikes([]);
+    expect(result).toBe(null);
+  })
 
   test('when list has only one blog equals the likes of that', () => {
     const result = listHelper.totalLikes([blogs[0]])
@@ -16,6 +19,12 @@ describe('total likes', () => {
 })
 
 describe('favorites', () => {
+
+  test('empty list returns null', () => {
+    const result = listHelper.favoriteBlog([]);
+    expect(result).toBe(null);
+  })
+
   test('list with one blog returns it', () => {
     const result = listHelper.favoriteBlog([blogs[0]]);
     expect(result).toBe(blogs[0]);
@@ -28,9 +37,27 @@ describe('favorites', () => {
 })
 
 describe('mostBlogs', () => {
+
+  test('empty list returns null', () => {
+    const result = listHelper.mostBlogs([]);
+    expect(result).toBe(null);
+  })
+
   test('correct for complete list', () => {
     const result = listHelper.mostBlogs(blogs);
     expect(result).toEqual({"author": "Robert C. Martin", "blogs": 3});
+  })
+})
+
+describe('mostLikes', () => {
+  test('empty list returns null', () => {
+    const result = listHelper.mostLikes(blogs);
+    expect(result.likes).toBe(17);
+  })
+
+  test('works for empty lists', () => {
+    const result = listHelper.mostLikes([]);
+    expect(result).toBe(null);
   })
 })
 
