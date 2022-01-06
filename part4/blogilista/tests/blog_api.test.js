@@ -5,6 +5,16 @@ const app = require('../app');
 const api = supertest(app);
 
 const Blog = require('../models/blog');
+const User = require('../models/user');
+const initialUser = {
+  username: "initialuser",
+  name: "initialuser",
+  password: "initialuser"
+}
+let creds = {
+  username: initialUser.username,
+  password: initialUser.password
+};
 const initialBlogs = [
   {
     "title": "test",
@@ -19,15 +29,30 @@ const initialBlogs = [
     "likes": -1000
   }
 ]
+let token = null;
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
+
+  let res = await api.post('/api/users')
+    .send(initialUser);
+
+  let userid = res.body.id;
 
   let blogObject = new Blog(initialBlogs[0]);
+  blogObject.user = userid;
+
   await blogObject.save();
 
   blogObject = new Blog(initialBlogs[1]);
+  blogObject.user = userid;
   await blogObject.save();
+
+  res = await api.post('/api/login')
+    .send(creds);
+  token = res.body.token;
+
 });
 
 test('blogs are returned as json', async () => {
@@ -49,6 +74,19 @@ test('identifying field is id', async () => {
   expect(first.id).toBeDefined();
 });
   
+test('adding without authorization returns 401', async () => {
+  const newObject = {
+    "title": "this blog will not be added",
+    "author": "adder",
+    "url": "add.er",
+    "likes": 42
+  };
+
+  await api.post('/api/blogs')
+    .send(newObject)
+    .expect(401);
+});
+
 test('can add new blog', async () => {
   const newObject = {
     "title": "this blog was added",
@@ -58,6 +96,7 @@ test('can add new blog', async () => {
   };
 
   await api.post('/api/blogs')
+    .set({"authorization": `bearer ${token}`})
     .send(newObject)
     .expect(201)
     .expect('Content-Type', /application\/json/);
@@ -75,6 +114,7 @@ test('likes is 0 if not set', async () => {
   };
 
   await api.post('/api/blogs')
+    .set({"authorization": `bearer ${token}`})
     .send(newObject)
     .expect(201)
     .expect('Content-Type', /application\/json/);
@@ -92,8 +132,9 @@ test('sending blog without title or url returns bad request', async () => {
   };
 
   await api.post('/api/blogs')
+    .set({"authorization": `bearer ${token}`})
     .send(newObject)
-    .expect(401);
+    .expect(400);
 });
 
 afterAll(() => {
